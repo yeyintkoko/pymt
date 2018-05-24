@@ -21,9 +21,19 @@ var storage = multer.diskStorage({
 });
 var upload = multer({ storage: storage }).single('userPhoto');
 /***********************************************************************************************************************/
-router.get('/',function(req, res){
-    res.render('pages/index', { layout: false });
+router.get('/', function(req, res){
+  // var callbackUrl = 'http://localhost:3000/dashboard'
+  // var parameters = 'response_type=code&client_id='+config.client_id+'&connection='+config.auth0_connection+'&redirect_uri='+callbackUrl
+  // return res.redirect(config.auth0_url + 'authorize?' + parameters)
+  return res.render('pages/index', {layout: false})
 });
+
+router.get('/logout',function(req, res){
+  var callbackUrl = 'http://localhost:3000'
+  var parameters = 'client_id='+config.client_id+'&returnTo='+callbackUrl
+  return res.redirect(config.auth0_url + 'v2/logout?' + parameters)
+});
+
 /***********************************************************************************************************************/
 router.get('/addItem', function (req, res) {
     res.render('pages/addItem');
@@ -55,7 +65,9 @@ router.get('/getCategory/:id', function (req, res) {
 });
 /***********************************************************************************************************************/
 router.get('/dashboard', function (req, res) {
-    res.render('pages/dashboard');
+  console.log('---------------- loggedin jwt user ------------')
+  console.log(req.cookies.jwtToken)
+  res.render('pages/dashboard');
 });
 /***********************************************************************************************************************/
 router.get('/account', function (req, res) {
@@ -107,6 +119,8 @@ router.get('/users', function (req, res) {
          Last_Name: user.family_name,
          Pin: (user.user_metadata && user.user_metadata.user_pin) || ''
       }))
+    } else if (data && data.error) {
+      return res.render('pages/error', { layout: false, error: data.error_description });
     }
     return res.render('pages/users', { data: users });
   });
@@ -132,7 +146,6 @@ router.get('/userEdit/:id', function (req, res) {
                 success: true,
                 data: result,
                 state: 200
-
             });
         }
     });
@@ -215,29 +228,53 @@ router.post('/AddCategory',  function(req,res) {
 router.post('/login',function(req,res){
     var email = req.body.email;
     var password = req.body.password;
-    connection.query('SELECT * FROM users WHERE email = ?', [email], function (error, results, fields) {
-        if (error) {
-            res.json({
-                status: false,
-                message: 'there are some error with query'
-            })
-        } else {
-            if (results.length > 0) {
-                if (password == results[0].password) {
-                    var payload = { result: results[0]};
-                    var token = jwt.sign(payload, config.secret, {
-                        expiresIn: 5000
-                    });
-                   res.redirect('/dashboard');
-                } else {
-                    res.render('index',{layout:false,error:'Incorrect password.'});
-                }
 
-            }
-            else {
-                res.render('index', {layout:false, error: 'Incorrect email.' });
-            }
+    var args = {
+      data: {
+        "grant_type": "password",
+        "username": email,
+        "password": password,
+        "audience": config.audience,
+        "scope": "openid email",
+        "client_id": config.client_id,
+        "client_secret": config.client_secret
+      },
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
+    client.post(config.auth0_url + "oauth/token", args, function (data, response) {
+      // parsed response body as js object
+      console.log('------------------------- login response body -------------------')
+      console.log(data)
+
+      if(data && data.access_token) {
+        args = {
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": 'Bearer '+ data.access_token
+          }
         }
+        client.post(config.auth0_url + "userinfo", args, function (profile, response) {
+          // parsed response body as js object
+          console.log('------------------------- profile response body -------------------')
+          console.log(profile);
+          if(profile && !profile.error) {
+            profile.access_token = data.access_token
+            profile.id_token = data.id_token
+            var token = jwt.sign(profile, config.secret, {
+                expiresIn: 5000
+            });
+            res.cookie('jwtToken', token, { maxAge: 900000, httpOnly: true });
+            res.redirect('dashboard?token=' + token);
+          } else {
+            res.render('pages/error', { layout: false, error: profile.error });
+          }
+        });
+
+      } else {
+        res.render('pages/error', { layout: false, error: data.error_description });
+      }
     });
 });
 /***********************************************************************************************************************/
@@ -269,10 +306,9 @@ router.post('/updatePassword', (req,res)=>{
 
 /***********************************************************************************************************************/
 router.post('/UserDataInserted', function(req,res){
-  var user_id= req.body.userid;
-    var first_name = req.body.first_name;
-    var last_name = req.body.last_name;
-    var user_pin =  req.body.user_pin;
+  var userId= req.body.userId;
+    var firstName = req.body.firstName;
+    var lastName = req.body.lastName;
     var token = require('../helper').token;
 
     if(!token) {
@@ -281,15 +317,16 @@ router.post('/UserDataInserted', function(req,res){
 
     var args = {
       data: {
-        "user_id": user_id,
-        "connection": "Username-Password-Authentication",
-        "name": first_name+ " " + last_name,
-        "given_name": first_name,
-        "family_name": last_name,
+        "user_id": userId,
+        "connection": config.auth0_connection,
+        "name": firstName+ " " + lastName,
+        "given_name": firstName,
+        "family_name": lastName,
         "email": req.body.email,
         "password": req.body.password,
         "user_metadata": {
-          "user_pin": user_pin
+          "pin": req.body.pin,
+          "isAdmin": req.body.isAdmin
         },
         "email_verified": false,
         "verify_email": false,
@@ -305,10 +342,10 @@ router.post('/UserDataInserted', function(req,res){
       // parsed response body as js object
       console.log('------------------------- response body -------------------')
       console.log(data);
-      if(data && data.user_id) {
+      if(data && !data.error) {
         return res.redirect('/users');
       } else {
-        return res.send('Cannot create user')
+        return res.render('pages/error', { layout: false, error: data.error_description })
       }
     });
 });

@@ -14,7 +14,7 @@ var getAuth0Token = function() {
       "Content-Type": "application/json"
     }
   }
-  var url = 'https://yeyintkoko.au.auth0.com/oauth/token'
+  var url = config.auth0_url+ "oauth/token"
 
   client.post(url, args, function (data, response) {
     module.exports.token = data

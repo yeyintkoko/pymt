@@ -6,7 +6,8 @@ var logger = require('morgan');
 var cors = require('cors');
 var bodyParser = require('body-parser');
 var partials = require('express-partials')
-
+var jwt = require('express-jwt');
+var config = require('./config/config.js');
 var indexRouter = require('./routes/index');
 
 var app = express();
@@ -16,6 +17,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 app.use(partials());
+// app.use(jwt({ secret: config.secret}).unless({path: ['/', /stylesheets/, /assets/, /fonts/, /login/, /logout/]}));
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -48,3 +50,5 @@ var { getAuth0Token } = require('./helper')
 getAuth0Token();
 
 module.exports = app;
+// run on terminal using below command
+// DEBUG=web:* npm start
