@@ -1,0 +1,177 @@
+<!-- Right Panel -->
+<div id="right-panel" class="right-panel">
+    <!-- Header-->
+    <!-- /header -->
+    <!-- Header-->
+
+    <div class="content mt-3">
+        <div class="animated fadeIn">
+            <div class="row">
+                <div class="col-12 col-sm-12">
+                    <div class="col-4 col-sm-4">
+                        <h1>Categories</h1>
+                    </div>
+
+                    <div class="col-6 col-sm-8 text-light">
+ <button class="btn btn-outline-secondary pull-right" style="margin-right:10px" data-toggle="modal" data-target="#staticModal">Add New Category</button>
+                    </div>
+
+                </div>
+                <div class="col-md-12">
+                    <div class="card">
+
+                        <div class="card-body">
+                            <table id="bootstrap-data-table" class="table table-striped table-bordered">
+                                <thead>
+                                    <tr>
+
+                                        <th>Category Name</th>
+                                        <th>Category Color</th>
+                                        <th>Category Icon</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% if(typeof data !== 'undefined'){ 
+                                            data.forEach(function(category){%>
+                                        <tr>
+                                            <td> <%= category.CategoryName %> </td>
+                                             <td><%= category.CategoryColor %></td>
+                                            <td><%= category.CategoryIcon %></td>
+                                            <td>
+                                        <a id="edit" href="javascript:void(0)"  class="btn btn-danger pull-right" attr_id="<%= category.CategoryID %>"
+                                             data-toggle="modal" data-target="#staticModal1" style="margin-right:10px;background-color:rgb(16, 112, 24) ;">Edit</a>
+                                            </td>
+                                        </tr>
+
+                                        <% }); } %>
+                                </tbody>
+
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- .animated -->
+    </div>
+    <!-- .content -->
+
+</div>
+<!-- /#right-panel -->
+<!-- Right Panel -->
+
+<div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Add Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form name="myform" method="post" action="/AddCategory">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="cc-payment" class="control-label mb-1">Category name</label>
+                        <input name="category_name" id="category_name" type="text" class="form-control" aria-required="true" aria-invalid="false">
+                    </div>
+                    <div class="form-group has-success">
+                        <label for="cc-name" class="control-label mb-1">Category color</label>
+                    <select class="form-control" id="category_color" name="category_color">
+                    <option>1</option>
+                    <option>2</option>
+                    </select>
+                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cc-number" class="control-label mb-1">Category icon</label>
+                        <select class="form-control" id="category_icon" name="category_icon">
+                            <option>1</option>
+                            <option>2</option>
+                            </select>
+                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                <input type="hidden" name="userid" id="userid">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="staticModal1" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticModalLabel">Edit Category</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <form name="myform" method="post" action="/updateCategory">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="cc-payment" class="control-label mb-1">Category name</label>
+                        <input name="categoryname" id="categoryname" type="text" class="form-control" aria-required="true" aria-invalid="false">
+                    </div>
+                    <div class="form-group has-success">
+                        <label for="cc-name" class="control-label mb-1">Category color</label>
+                        <select class="form-control" id="categorycolor" name="categorycolor">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                        <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="cc-number" class="control-label mb-1">Category icon</label>
+                        <select class="form-control" id="categoryicon" name="categoryicon">
+                            <option>1</option>
+                            <option>2</option>
+                        </select>
+                        <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                    </div>
+                    <div class="form-group">
+                        <input type="hidden" name="user_id" id="user_id">
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript">
+   $(document).ready(function(){
+           $(document).on('click', '#edit', function () {
+            var id = $(this).attr('attr_id');
+            $.ajax({
+                type: "GET",
+                url: '/getCategory/' + id,
+                success: function (data) {
+                    var userid = data.data[0].CategoryID;
+                    var categoryname = data.data[0].CategoryName;
+                    var categorycolor = data.data[0].CategoryColor;
+                    var catgeoryicon = data.data[0].CategoryIcon;
+                    $("#categoryname").val(categoryname);
+                    $("#categorycolor").val(categorycolor);
+                    $("#catgeoryicon").val(catgeoryicon);
+                    $("#user_id").val(userid);
+                }
+            })
+        });
+    });
+</script>

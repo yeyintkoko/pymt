@@ -1,0 +1,144 @@
+﻿
+    <!-- Right Panel -->
+
+    <div id="right-panel" class="right-panel">
+
+        <!-- Header-->
+        <!-- /header -->
+        <!-- Header-->
+
+        <div class="breadcrumbs">
+
+        </div>
+
+        <div class="content mt-3">
+
+
+            <div class="col-12 col-sm-12">
+
+            </div>
+
+            <div class="col-12 col-sm-12 clearfix" style="margin-top:10px">
+                <div class="row">
+                    <div class="col-12 col-sm-12">
+                        <div class="col-4 col-sm-4">
+                            <h1>Account Information</h1>
+                        </div>
+
+                    </div>
+                    <div class="col-md-12">
+
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 col-sm-12">
+                                    <div class="col-6 col-sm-6">
+                                        <form method="post"   action="/accountInformation">
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Email</label>
+                                                <input type="text" class="form-control" id="email" name="email" placeholder="Example input">
+                                                <a href="javascript:void()" id="updatePassword" data-toggle="modal" data-target="#staticModal" style="float: right; color:blue" >Forgot password</a>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput2">Company Name</label>
+                                                <input type="text" class="form-control" id="company_name" id="company_name" placeholder="Example input">
+                                            </div>
+                                            <div class="form-group">
+                                                <div style="height:100px;width:100px; border-radius:100%;border:1px solid #434343;background-color:#939393;margin-left:100px"></div>
+                                                <input type="file" class="btn"  style="background-color:#75d4bd;">Add edit image
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">First Name</label>
+                                                <input type="text" class="form-control" id="first_name" name="first_name" placeholder="Example input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Last Name</label>
+                                                <input type="text" class="form-control" id="last_name" name="last_name" placeholder="Example input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Phone Number</label>
+                                                <input type="text" class="form-control" id="phone_no" name="phone_no" placeholder="Example input">
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="formGroupExampleInput">Tax Rate</label>
+                                                <input type="text" class="form-control" id="tax_rate" name="tax_rate" placeholder="Example input">
+                                            </div>
+                                            <div class="form-group">
+                                                <button class="btn " type="submit" style="margin-right:10px;background-color:#75d4bd">Save</button>
+                                            </div>
+                                        </div>
+                                    <div class="col-6 col-sm-6">
+                                        <iframe width="400"
+                                                height="300"
+                                                frameborder="0" style="border:0"
+                                                src="https://www.google.com/maps/embed/v1/place?key=AIzaSyCF3kKhfWOXHB7M4bAIyZiMWTuEPJb91PU
+                                                   &q=Space+Needle,Seattle+WA" allowfullscreen></iframe>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput">Company Address</label>
+                                            <input type="text" class="form-control" id="company_address" name="company_address" placeholder="Example input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput">Company Address 2</label>
+                                            <input type="text" class="form-control" id="company_address2" name="company_address2" placeholder="Example input">
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput2">State</label>
+                                            <select class="form-control" id="state" name="state">
+                                                <option>1</option>
+                                                <option>2</option>
+
+                                            </select>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="formGroupExampleInput"> Company Zip </label>
+                                            <input type="text" class="form-control" id="companyzip" name="companyzip" placeholder="Example input">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                     
+                        </div>
+
+                    </form>
+                    </div>
+                </div>
+
+
+            </div> <!-- .content -->
+        </div><!-- /#right-panel -->
+        <!-- Right Panel -->
+
+        <div class="modal fade" id="staticModal" tabindex="-1" role="dialog" aria-labelledby="staticModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-sm" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="staticModalLabe">Update Password</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form method="post" action="/updatePassword">
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="cc-payment"  class="control-label mb-1">Current Password</label>
+                            <input name="currentPassword" id="currentPassword" type="password" class="form-control" aria-required="true" aria-invalid="false" >
+                        </div>
+                        <input type="hidden" value=value id="email" name="email" >
+                        <div class="form-group has-success">
+                            <label for="cc-name" class="control-label mb-1">New Password</label>
+                            <input name="newPassword" id="newPassword" type="password" class="form-control cc-name valid" data-val="true" data-val-required="Please enter the name on card" autocomplete="cc-name" aria-required="true" aria-invalid="false" aria-describedby="cc-name-error">
+                            <span class="help-block field-validation-valid" data-valmsg-for="cc-name" data-valmsg-replace="true"></span>
+                        </div>
+                        <div class="form-group">
+                            <label for="cc-number" class="control-label mb-1">New Password Again</label>
+                            <input id="againPassword" name="againPassword" type="password" class="form-control cc-number identified visa" value="" data-val="true" data-val-required="Please enter the card number" data-val-cc-number="Please enter a valid card number" autocomplete="cc-number">
+                            <span class="help-block" data-valmsg-for="cc-number" data-valmsg-replace="true"></span>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Save</button>   
+                    </div>
+                </form>
+                </div>
+            </div>
+        </div>
+        

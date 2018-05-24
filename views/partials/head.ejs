@@ -2,7 +2,7 @@
   <link rel='stylesheet' href='/stylesheets/style.css' />
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title><%= title %></title>
+  <title><% if(typeof title !== 'undefined') { title } else { 'PYMT POS' } %></title>
   <meta name="description" content="Sufee Admin - ejs5 Admin Template">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
